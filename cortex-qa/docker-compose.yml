@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  cortex-qa:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Fallback service mocks active unless explicitly specified here
+      - NEXT_PUBLIC_FIREBASE_API_KEY=${FIREBASE_API_KEY:-}
+      - CLOUDINARY_URL=${CLOUDINARY_URL:-}
+      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL:-}
+      - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN:-}
+    restart: always
