@@ -7,7 +7,7 @@ import { useSync } from './SyncProvider';
 interface AuthContextType {
   user: UserProfile | null;
   loading: boolean;
-  login: (email: string, role: UserRole) => Promise<boolean>;
+  login: (email: string) => Promise<boolean>;
   logout: () => Promise<void>;
   hasPermission: (permission: string) => boolean;
   isRole: (roles: UserRole[]) => boolean;
@@ -52,13 +52,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadSession();
   }, []);
 
-  const login = async (email: string, role: UserRole): Promise<boolean> => {
+  const login = async (email: string): Promise<boolean> => {
     setLoading(true);
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, role }),
+        body: JSON.stringify({ email }),
       });
       
       if (res.ok) {

@@ -2,170 +2,126 @@
 
 import React, { useState } from 'react';
 import NavigationLayout from '@/components/NavigationLayout';
-import { useQuery } from '@tanstack/react-query';
-import { ClipboardList, Clipboard, CheckCircle, Clock } from 'lucide-react';
-import Link from 'next/link';
+import { Building2, Layers, Clipboard, AlertCircle } from 'lucide-react';
 
-async function fetchProjects() {
-  const res = await fetch('/api/projects');
-  if (!res.ok) throw new Error('Failed to load projects');
-  const data = await res.json();
-  return data.projects;
+interface Task {
+  id: string;
+  title: string;
+  subtitle: string;
+  location?: string;
+  stage?: string;
+  dueDate: 'today' | 'week' | 'overdue';
+  dueText: string;
 }
 
+const MOCK_TASKS: Task[] = [
+  {
+    id: 'task-1',
+    title: 'Complete Panel Preparation stage',
+    subtitle: 'ACME Manufacturing - Bhiwadi',
+    location: 'Sites Bhiwadi',
+    stage: 'Stage 4/13',
+    dueDate: 'today',
+    dueText: 'Due today'
+  },
+  {
+    id: 'task-2',
+    title: 'Collect 6 months bills — Reliance Jamnagar',
+    subtitle: 'Awaiting client documents',
+    dueDate: 'week',
+    dueText: 'This week'
+  }
+];
+
 export default function TasksPage() {
-  const [filter, setFilter] = useState<'All' | 'Pending' | 'Active' | 'Done'>('All');
+  const [filter, setFilter] = useState<'All' | 'Today' | 'This week' | 'Overdue'>('All');
 
-  const { data: projects, isLoading } = useQuery({
-    queryKey: ['projects'],
-    queryFn: fetchProjects,
-  });
-
-  // Calculate counts based on projects database
-  const totalCount = projects?.length || 0;
-  const pendingCount = (projects || []).filter((p: any) => p.status === 'pending').length;
-  const activeCount = (projects || []).filter((p: any) => p.status === 'active').length;
-  const doneCount = (projects || []).filter((p: any) => p.status === 'completed').length;
-
-  // Filter projects list
-  const filteredProjects = (projects || []).filter((p: any) => {
-    if (filter === 'Pending') return p.status === 'pending';
-    if (filter === 'Active') return p.status === 'active';
-    if (filter === 'Done') return p.status === 'completed';
+  // Filter tasks list
+  const filteredTasks = MOCK_TASKS.filter((task) => {
+    if (filter === 'Today') return task.dueDate === 'today';
+    if (filter === 'This week') return task.dueDate === 'week';
+    if (filter === 'Overdue') return task.dueDate === 'overdue';
     return true;
   });
 
   return (
     <NavigationLayout>
-      <div className="space-y-6 max-w-4xl mx-auto">
+      <div className="space-y-6 max-w-4xl mx-auto px-2 pb-10">
         
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-text-base">Tasks</h1>
-          <p className="text-sm text-text-muted mt-1">All assigned tasks</p>
+          <h1 className="text-2xl font-bold tracking-tight text-text-base">My Tasks</h1>
+          <p className="text-xs text-text-muted mt-0.5 font-medium">Installation assignments</p>
         </div>
 
         {/* Filter Pills Row */}
-        <div className="flex flex-wrap gap-3 items-center">
-          {/* 1. All */}
-          <button
-            onClick={() => setFilter('All')}
-            className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border text-sm font-semibold transition-all touch-target cursor-pointer ${
-              filter === 'All'
-                ? 'border-primary text-primary bg-primary/5'
-                : 'border-border-custom text-text-muted hover:bg-accent/5'
-            }`}
-          >
-            <span>All</span>
-            <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-              filter === 'All' ? 'bg-primary text-white' : 'bg-accent/5 text-text-muted'
-            }`}>
-              {totalCount}
-            </span>
-          </button>
-
-          {/* 2. Pending */}
-          <button
-            onClick={() => setFilter('Pending')}
-            className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border text-sm font-semibold transition-all touch-target cursor-pointer ${
-              filter === 'Pending'
-                ? 'border-primary text-primary bg-primary/5'
-                : 'border-border-custom text-text-muted hover:bg-accent/5'
-            }`}
-          >
-            <span>Pending</span>
-            <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-              filter === 'Pending' ? 'bg-primary text-white' : 'bg-accent/5 text-text-muted'
-            }`}>
-              {pendingCount}
-            </span>
-          </button>
-
-          {/* 3. Active */}
-          <button
-            onClick={() => setFilter('Active')}
-            className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border text-sm font-semibold transition-all touch-target cursor-pointer ${
-              filter === 'Active'
-                ? 'border-primary text-primary bg-primary/5'
-                : 'border-border-custom text-text-muted hover:bg-accent/5'
-            }`}
-          >
-            <span>Active</span>
-            <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-              filter === 'Active' ? 'bg-primary text-white' : 'bg-accent/5 text-text-muted'
-            }`}>
-              {activeCount}
-            </span>
-          </button>
-
-          {/* 4. Done */}
-          <button
-            onClick={() => setFilter('Done')}
-            className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border text-sm font-semibold transition-all touch-target cursor-pointer ${
-              filter === 'Done'
-                ? 'border-primary text-primary bg-primary/5'
-                : 'border-border-custom text-text-muted hover:bg-accent/5'
-            }`}
-          >
-            <span>Done</span>
-            <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-              filter === 'Done' ? 'bg-primary text-white' : 'bg-accent/5 text-text-muted'
-            }`}>
-              {doneCount}
-            </span>
-          </button>
+        <div className="flex flex-wrap gap-2.5 items-center">
+          {(['All', 'Today', 'This week', 'Overdue'] as const).map((tab) => {
+            const isActive = filter === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => setFilter(tab)}
+                className={`px-4 py-1.5 rounded-full border text-xs font-semibold transition-all cursor-pointer ${
+                  isActive
+                    ? 'border-[#B45309] text-[#B45309] bg-orange-50/50'
+                    : 'border-border-custom text-text-muted hover:bg-accent/5'
+                }`}
+              >
+                {tab}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Content Area */}
-        {isLoading ? (
-          <div className="space-y-3 pt-6">
-            {[1, 2].map((i) => (
-              <div key={i} className="h-16 bg-bg-surface border border-border-custom rounded-2xl animate-pulse"></div>
-            ))}
-          </div>
-        ) : filteredProjects.length === 0 ? (
-          /* Empty State exactly matching the screenshot */
-          <div className="flex flex-col items-center justify-center py-20 px-4 space-y-4">
-            <div className="h-20 w-20 rounded-full bg-accent/5 flex items-center justify-center">
-              <Clipboard className="h-10 w-10 text-text-muted/60" />
+        {/* Tasks List */}
+        {filteredTasks.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 px-4 space-y-4 bg-bg-surface border border-border-custom rounded-2xl shadow-sm">
+            <div className="h-14 w-14 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center">
+              <Clipboard className="h-6 w-6 text-[#B45309]" />
             </div>
             <div className="text-center space-y-1">
-              <h3 className="font-bold text-xl text-text-base">No tasks found</h3>
-              <p className="text-sm text-text-muted">Tasks assigned to you will appear here.</p>
+              <h3 className="font-bold text-base text-text-base">No tasks found</h3>
+              <p className="text-xs text-text-muted">No assignments in this category.</p>
             </div>
           </div>
         ) : (
-          /* Tasks List view if they exist */
-          <div className="space-y-4 pt-4">
-            {filteredProjects.map((project: any) => (
-              <Link
-                key={project.id}
-                href={project.status === 'completed' ? `/api/reports/pdf?projectId=${project.id}` : `/inspections/${project.id}`}
-                target={project.status === 'completed' ? '_blank' : '_self'}
-                className="block"
+          <div className="space-y-3 pt-2">
+            {filteredTasks.map((task) => (
+              <div
+                key={task.id}
+                className="bg-bg-surface border border-border-custom rounded-2xl p-5 flex items-center justify-between hover:border-[#B45309]/40 hover:shadow-sm transition-all duration-200"
               >
-                <div className="bg-bg-surface border border-border-custom rounded-2xl p-5 flex items-center justify-between hover:border-primary/45 hover:shadow-sm transition-all duration-200 cursor-pointer">
-                  <div className="space-y-1">
-                    <h3 className="font-bold text-lg text-text-base">{project.name}</h3>
-                    <p className="text-xs text-text-muted font-medium">S/N: {project.serialNumber || 'VIREON-MCC-415V-2026-001'}</p>
-                    <p className="text-xs text-primary font-bold">Dwg. No: {project.drawingNumber || '040'}</p>
-                  </div>
+                <div className="space-y-1.5">
+                  <h3 className="font-bold text-sm text-text-base leading-snug">{task.title}</h3>
+                  <p className="text-xs text-text-muted font-medium">{task.subtitle}</p>
                   
-                  <div className="flex items-center space-x-2">
-                    {project.status === 'completed' ? (
-                      <span className="inline-flex items-center px-3 py-1 bg-green-500/10 text-green-600 text-xs font-bold rounded-full border border-green-500/20">
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                        Completed
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center px-3 py-1 bg-amber-500/10 text-amber-600 text-xs font-bold rounded-full border border-amber-500/20">
-                        <Clock className="h-3 w-3 mr-1 animate-pulse" />
-                        Stage {project.currentStage}
-                      </span>
-                    )}
-                  </div>
+                  {/* Metadata Row */}
+                  {(task.location || task.stage) && (
+                    <div className="flex items-center space-x-4 pt-1 text-[11px] text-text-muted/80 font-medium">
+                      {task.location && (
+                        <div className="flex items-center space-x-1">
+                          <Building2 className="h-3 w-3 text-text-muted/60" />
+                          <span>{task.location}</span>
+                        </div>
+                      )}
+                      {task.stage && (
+                        <div className="flex items-center space-x-1">
+                          <Layers className="h-3 w-3 text-text-muted/60" />
+                          <span>{task.stage}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-              </Link>
+                
+                {/* Due Date Badge */}
+                <div>
+                  <span className="inline-flex items-center px-3 py-1 bg-orange-50 text-[#B45309] text-[10px] font-bold rounded-full border border-orange-100/50">
+                    {task.dueText}
+                  </span>
+                </div>
+              </div>
             ))}
           </div>
         )}

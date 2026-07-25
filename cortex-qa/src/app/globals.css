@@ -10,6 +10,7 @@
   --color-border-custom: var(--border-custom);
   --color-text-base: var(--text-base);
   --color-text-muted: var(--text-muted);
+  --color-bg-peach: var(--bg-peach);
 }
 
 :root {
@@ -17,26 +18,13 @@
   --primary-light: #c77b50;
   --primary-dark: #9c5934;
   --accent: #333333;
-  
-  --bg-base: #f9fafb;
+
+  --bg-base: rgb(247, 245, 241);
   --bg-surface: #ffffff;
   --border-custom: #e5e7eb;
   --text-base: #111827;
   --text-muted: #6b7280;
-}
-
-/* VIR Mode: High Contrast Industrial Mode */
-.vir-mode {
-  --primary: #e67e22;
-  --primary-light: #f39c12;
-  --primary-dark: #d35400;
-  --accent: #111111;
-  
-  --bg-base: #0f0f12;
-  --bg-surface: #1a1a24;
-  --border-custom: #e67e22; /* High visibility orange-red border */
-  --text-base: #ffffff;
-  --text-muted: #a0aec0;
+  --bg-peach: rgb(245, 230, 218);
 }
 
 body {
@@ -50,9 +38,9 @@ body {
 }
 
 /* Industrial Touch Targets and Forms (minimum 44px) */
-button, 
-select, 
-input, 
+button,
+select,
+input,
 textarea {
   min-height: 44px;
 }
@@ -88,8 +76,4 @@ textarea {
   background: var(--bg-surface);
   border: 1px solid var(--border-custom);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-}
-
-.vir-mode .glass-panel {
-  box-shadow: 0 0 10px rgba(230, 126, 34, 0.15);
 }

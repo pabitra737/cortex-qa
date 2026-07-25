@@ -14,32 +14,19 @@ declare global {
   } | undefined;
 }
 
-const DEFAULT_FACTORIES: TenantFactory[] = [
-  {
-    id: 'factory-1',
-    name: 'Vireon Panels Bangalore',
-    location: 'Bangalore, IN',
-    settings: {
-      allowStageSkipping: false,
-      requireDoubleApproval: true,
-      companyLogoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100'
-    },
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'factory-2',
-    name: 'Vireon Switchgear Chennai',
-    location: 'Chennai, IN',
-    settings: {
-      allowStageSkipping: true,
-      requireDoubleApproval: false,
-      companyLogoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100'
-    },
-    createdAt: new Date().toISOString()
-  }
-];
+const DEFAULT_FACTORIES: TenantFactory[] = [];
 
 const DEFAULT_USERS: UserProfile[] = [
+  {
+    uid: 'user-dada',
+    email: 'dada@vireontech.in',
+    name: 'Dwaipayan Das',
+    role: 'Super Admin',
+    factoryId: 'all',
+    status: 'active',
+    permissions: ['*'],
+    createdAt: new Date().toISOString()
+  },
   {
     uid: 'user-1',
     email: 'admin@cortex.com',
@@ -92,47 +79,18 @@ const DEFAULT_USERS: UserProfile[] = [
   }
 ];
 
-const DEFAULT_PRODUCTS: Product[] = [
-  {
-    id: 'prod-1',
-    factoryId: 'factory-1',
-    name: 'Standard 415V MCC Panel',
-    sku: 'MCC-415-STD',
-    specifications: {
-      voltageRating: '415V',
-      currentRating: '800A',
-      ipRating: 'IP54',
-      dimensions: '2000 x 800 x 600 mm'
-    },
-    batches: ['BATCH-2026-A', 'BATCH-2026-B'],
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'prod-2',
-    factoryId: 'factory-1',
-    name: 'PCC Power Control Center Panel',
-    sku: 'PCC-1600-HD',
-    specifications: {
-      voltageRating: '415V',
-      currentRating: '1600A',
-      ipRating: 'IP65',
-      dimensions: '2200 x 1000 x 800 mm'
-    },
-    batches: ['BATCH-2026-C'],
-    createdAt: new Date().toISOString()
-  }
-];
+const DEFAULT_PRODUCTS: Product[] = [];
 
 const DEFAULT_PROJECTS: Project[] = [
   {
     id: 'proj-1',
     factoryId: 'factory-1',
-    name: 'ACME',
-    description: 'High-voltage MCC Panels supply for Metro Expansion Project.',
+    name: 'ACME Manufacturing',
+    description: 'MCC',
     engineerIds: ['user-2'],
     inspectorIds: ['user-3'],
-    assignedInspectorName: 'Mihir Bajpai',
-    serialNumber: 'VIREON-MCC-415V-2026-001',
+    assignedInspectorName: 'Rahul Sharma',
+    serialNumber: 'VIREON-INST-2026-018',
     drawingNumber: '040',
     tags: ['MCC', 'Pending', '415V'],
     status: 'active',
@@ -143,14 +101,14 @@ const DEFAULT_PROJECTS: Project[] = [
   {
     id: 'proj-2',
     factoryId: 'factory-1',
-    name: 'Reliance',
-    description: 'Custom IP65 Heavy Duty Panel batch.',
+    name: 'Reliance Industries',
+    description: 'APFC',
     engineerIds: ['user-2'],
     inspectorIds: ['user-3'],
-    assignedInspectorName: 'Mihir Bajpai',
-    serialNumber: 'VIREON-FF-415V-2026-001',
+    assignedInspectorName: 'Unassigned',
+    serialNumber: 'VIREON-INST-2026-019',
     drawingNumber: 'DRG-01-002',
-    tags: ['Fire Fighting', 'Pending', '415V'],
+    tags: ['APFC', 'Pending', '415V'],
     status: 'active',
     currentStage: 1, // Represents 0 completed stages
     createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
@@ -311,7 +269,7 @@ const DEFAULT_CHECKLISTS: ChecklistTemplate[] = [
 ];
 
 const DEFAULT_INSPECTIONS: Inspection[] = [
-  // Metro Line: Completed stages 1-6
+  // Metro Line: Completed stages 1-3
   {
     id: 'proj-1_1',
     projectId: 'proj-1',
@@ -349,176 +307,6 @@ const DEFAULT_INSPECTIONS: Inspection[] = [
     answers: { busbar_width: 50, bending_angle: 90, tin_plating: 'Satisfactory' },
     createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-1_4',
-    projectId: 'proj-1',
-    factoryId: 'factory-1',
-    stage: 4,
-    checklistId: 'chk-4',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { height_mm: 2002, width_mm: 801, welding_quality: 'Pass' },
-    createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-1_5',
-    projectId: 'proj-1',
-    factoryId: 'factory-1',
-    stage: 5,
-    checklistId: 'chk-5',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { torque_nm: 52, phase_clearance: 22, phase_earth_clearance: 22 },
-    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-1_6',
-    projectId: 'proj-1',
-    factoryId: 'factory-1',
-    stage: 6,
-    checklistId: 'chk-6',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { wire_sleeves: 'Yes', crimp_test: 'Pass', bundling_aesthetic: 'Excellent' },
-    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  // TATA Steel: Completed stages 1-10 (awaiting signature)
-  {
-    id: 'proj-2_1',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 1,
-    checklistId: 'chk-1',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { sheet_thickness: 2.3, busbar_grade: 'Yes', switchgear_visual: 'No Defect' },
-    createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-2_2',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 2,
-    checklistId: 'chk-2',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { dft_microns: 90, cross_hatch: '5B (Perfect)', finish_uniformity: 'Excellent' },
-    createdAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-2_3',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 3,
-    checklistId: 'chk-3',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { busbar_width: 80, bending_angle: 90, tin_plating: 'Satisfactory' },
-    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-2_4',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 4,
-    checklistId: 'chk-4',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { height_mm: 2200, width_mm: 1000, welding_quality: 'Pass' },
-    createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-2_5',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 5,
-    checklistId: 'chk-5',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { torque_nm: 55, phase_clearance: 25, phase_earth_clearance: 24 },
-    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-2_6',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 6,
-    checklistId: 'chk-6',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { wire_sleeves: 'Yes', crimp_test: 'Pass', bundling_aesthetic: 'Excellent' },
-    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-2_7',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 7,
-    checklistId: 'chk-7',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { megger_val: 500, withstand_v: 2.2 },
-    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-2_8',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 8,
-    checklistId: 'chk-8',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { shunt_tripping: 'Pass', plc_io_signal: 'Verified' },
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-2_9',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 9,
-    checklistId: 'chk-9',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { earth_resistance: 0.04, earth_labels: 'Yes' },
-    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-    approvedBy: 'user-2'
-  },
-  {
-    id: 'proj-2_10',
-    projectId: 'proj-2',
-    factoryId: 'factory-1',
-    stage: 10,
-    checklistId: 'chk-10',
-    inspectorId: 'user-3',
-    status: 'passed',
-    answers: { gasket_seal: 'Air-tight Seal', accessories_included: 'Yes', cleaning: 'Pass' },
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     approvedBy: 'user-2'
   }
 ];
@@ -576,13 +364,43 @@ export function getMockDb(): {
         syncLogs: JSON.parse(JSON.stringify(DEFAULT_SYNCS))
       };
     }
+    if (!globalThis.__cortex_mock_db.users.some((u: any) => u.email === 'dada@vireontech.in')) {
+      globalThis.__cortex_mock_db.users.unshift({
+        uid: 'user-dada',
+        email: 'dada@vireontech.in',
+        name: 'Dwaipayan Das',
+        role: 'Super Admin',
+        factoryId: 'all',
+        status: 'active',
+        permissions: ['*'],
+        createdAt: new Date().toISOString()
+      });
+    }
+    globalThis.__cortex_mock_db.projects = DEFAULT_PROJECTS;
+    globalThis.__cortex_mock_db.inspections = DEFAULT_INSPECTIONS;
     return globalThis.__cortex_mock_db;
   } else {
     // Client-side (in case it gets loaded on client, return or store in localStorage)
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('cortex_mock_db');
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        if (!parsed.users.some((u: any) => u.email === 'dada@vireontech.in')) {
+          parsed.users.unshift({
+            uid: 'user-dada',
+            email: 'dada@vireontech.in',
+            name: 'Dwaipayan Das',
+            role: 'Super Admin',
+            factoryId: 'all',
+            status: 'active',
+            permissions: ['*'],
+            createdAt: new Date().toISOString()
+          });
+        }
+        parsed.projects = DEFAULT_PROJECTS;
+        parsed.inspections = DEFAULT_INSPECTIONS;
+        localStorage.setItem('cortex_mock_db', JSON.stringify(parsed));
+        return parsed;
       }
       const data = {
         factories: DEFAULT_FACTORIES,

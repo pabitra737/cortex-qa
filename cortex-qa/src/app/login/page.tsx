@@ -3,44 +3,16 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/providers/AuthProvider';
-import { UserRole } from '@/types';
 import { ShieldCheck, Mail, Lock, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
   
-  const [email, setEmail] = useState('inspector@cortex.com');
-  const [role, setRole] = useState<UserRole>('QA Inspector');
+  const [email, setEmail] = useState('dada@vireontech.in');
   const [password, setPassword] = useState('••••••••');
   const [errorMsg, setErrorMsg] = useState('');
   const [submitting, setSubmitting] = useState(false);
-
-  // Pre-fill mock account on role select
-  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedRole = e.target.value as UserRole;
-    setRole(selectedRole);
-    
-    switch (selectedRole) {
-      case 'Super Admin':
-        setEmail('admin@cortex.com');
-        break;
-      case 'QA Manager':
-        setEmail('manager@cortex.com');
-        break;
-      case 'QA Inspector':
-        setEmail('inspector@cortex.com');
-        break;
-      case 'Operator':
-        setEmail('operator@cortex.com');
-        break;
-      case 'Customer':
-        setEmail('customer@cortex.com');
-        break;
-      default:
-        setEmail('inspector@cortex.com');
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,12 +20,12 @@ export default function LoginPage() {
     setSubmitting(true);
 
     try {
-      const success = await login(email, role);
+      const success = await login(email);
       if (success) {
-        router.push('/dashboard');
+        router.push('/projects');
         router.refresh();
       } else {
-        setErrorMsg('Invalid login credentials or role mismatch.');
+        setErrorMsg('Invalid login credentials.');
       }
     } catch (err: any) {
       setErrorMsg(err.message || 'System login failed. Try again.');
@@ -71,12 +43,9 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-bg-surface border border-border-custom rounded-2xl shadow-xl overflow-hidden z-10">
         
         {/* Banner Logo */}
-        <div className="px-8 pt-8 pb-4 text-center bg-accent/5 border-b border-border-custom">
-          <div className="inline-flex items-center justify-center p-3.5 bg-primary/10 text-primary rounded-2xl mb-3">
-            <ShieldCheck className="h-8 w-8" />
-          </div>
-          <h1 className="text-2xl font-extrabold tracking-tight">CORTEX-QA</h1>
-          <p className="text-sm text-text-muted mt-1">Enterprise Factory Quality Management Platform</p>
+        <div className="px-8 pt-8 pb-5 text-center bg-accent/5 border-b border-border-custom flex flex-col items-center">
+          <img src="/cortex_logo.svg" alt="Cortex Logo" className="h-24 w-auto object-contain mb-1" />
+          <p className="text-[10px] text-text-muted font-bold tracking-widest uppercase mt-1">Factory Quality Platform</p>
         </div>
 
         {/* Login Form */}
@@ -86,22 +55,6 @@ export default function LoginPage() {
               {errorMsg}
             </div>
           )}
-
-          {/* Role selector */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-text-muted">Account Quality Role</label>
-            <select
-              value={role}
-              onChange={handleRoleChange}
-              className="w-full px-3 py-2 border border-border-custom bg-bg-base rounded-lg text-sm focus:outline-none focus:border-primary font-medium"
-            >
-              <option value="QA Inspector">QA Inspector (Amit Patel)</option>
-              <option value="QA Manager">QA Manager (Suresh Raina)</option>
-              <option value="Super Admin">Super Admin (Rajesh Kumar)</option>
-              <option value="Operator">Operator (Vijay Mistry)</option>
-              <option value="Customer">Customer (TATA Rep)</option>
-            </select>
-          </div>
 
           {/* Email field */}
           <div className="space-y-1.5">

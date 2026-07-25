@@ -5,6 +5,9 @@ import { RootProvider } from "@/providers/RootProvider";
 export const metadata: Metadata = {
   title: "CORTEX-QA | Factory Quality Management Platform",
   description: "Enterprise Offline-First Quality Control & Compliance System for Panel Manufacturing.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

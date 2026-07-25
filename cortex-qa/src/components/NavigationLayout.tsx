@@ -28,35 +28,12 @@ export default function NavigationLayout({ children }: { children: React.ReactNo
   const [tab, setTab] = useState<string | null>(null);
   const { user, logout, hasPermission } = useAuth();
   const { isOnline, isSyncing, queueLength, triggerSync } = useSync();
-  const [virMode, setVirMode] = useState(false);
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       setTab(params.get('tab'));
     }
   }, [pathname]);
-
-  // Initialize VIR Mode from HTML element classes
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const isVir = document.documentElement.classList.contains('vir-mode');
-      setVirMode(isVir);
-    }
-  }, []);
-
-  const toggleVirMode = () => {
-    if (typeof window === 'undefined') return;
-    const current = !virMode;
-    setVirMode(current);
-    if (current) {
-      document.documentElement.classList.add('vir-mode');
-      localStorage.setItem('cortex_theme', 'vir');
-    } else {
-      document.documentElement.classList.remove('vir-mode');
-      localStorage.setItem('cortex_theme', 'light');
-    }
-  };
 
   const navItems = [
     { name: 'Projects', path: '/projects', icon: Folder, permission: 'read:all' },
@@ -65,10 +42,6 @@ export default function NavigationLayout({ children }: { children: React.ReactNo
     { name: 'Users', path: '/users', icon: Users, permission: 'read:all' },
   ];
 
-  // Admin items
-  if (user?.role === 'Super Admin' || user?.role === 'Factory Admin') {
-    navItems.push({ name: 'Factories', path: '/factories', icon: Factory, permission: 'manage:projects' });
-  }
   
   // Profile settings / diagnostics
   navItems.push({ name: 'Profile', path: '/profile', icon: User, permission: 'read:all' });
@@ -85,12 +58,7 @@ export default function NavigationLayout({ children }: { children: React.ReactNo
       <header className="h-16 flex items-center justify-between px-4 md:px-8 border-b border-border-custom bg-bg-surface sticky top-0 z-30 shadow-sm">
         {/* Left Side: Brand Logo & Factory info */}
         <div className="flex items-center space-x-3">
-          <span className="font-extrabold text-xl tracking-tight text-primary">CORTEX<span className="text-text-base">-QA</span></span>
-          {user && (
-            <span className="hidden sm:inline-block px-2.5 py-0.5 text-[10px] bg-primary/20 text-primary-dark rounded font-semibold uppercase">
-              {user.factoryId === 'all' ? 'All Factories' : `Factory: ${user.factoryId}`}
-            </span>
-          )}
+          <img src="/cortex_logo.svg" alt="Cortex Logo" className="h-12 w-auto object-contain" />
         </div>
 
         {/* Right Side: Network status, Sync, Theme, User Profile & Logout */}
@@ -108,28 +76,6 @@ export default function NavigationLayout({ children }: { children: React.ReactNo
             </button>
           )}
 
-          {/* Connection Status Indicator */}
-          <div className={`flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium ${isOnline ? 'bg-green-500/10 text-green-600' : 'bg-red-500/10 text-red-600'}`}>
-            {isOnline ? (
-              <>
-                <Wifi className="h-3.5 w-3.5 mr-1" />
-                <span className="hidden sm:inline">Online</span>
-              </>
-            ) : (
-              <>
-                <WifiOff className="h-3.5 w-3.5 mr-1" />
-                <span>Offline</span>
-              </>
-            )}
-          </div>
-
-          {/* High-Contrast Switcher */}
-          <button 
-            onClick={toggleVirMode}
-            className="px-3 py-1 border border-border-custom bg-bg-surface hover:bg-accent/5 rounded-lg text-xs font-bold transition-all cursor-pointer"
-          >
-            {virMode ? 'Light' : 'VIR'}
-          </button>
 
           {/* User Profile & Sign Out (Desktop/Tablet) */}
           {user && (

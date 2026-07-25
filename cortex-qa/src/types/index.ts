@@ -145,4 +145,9 @@ export interface DashboardMetrics {
   failedInspections?: number;
   pendingInspectionsCount?: number;
   passRate?: number;
+  stagesDone?: number;
+  inProgressStages?: number;
+  pendingStages?: number;
+  totalStages?: number;
+  installCompletionRate?: number;
 }

@@ -33,6 +33,13 @@ export async function GET() {
 
     const pendingInspections = activeProjects.length;
 
+    // Installer dashboard metrics
+    const totalStages = totalProjects * 13;
+    const stagesDone = completedInspections;
+    const inProgressStages = activeProjects.filter(p => p.currentStage > 1).length;
+    const pendingStages = totalStages - stagesDone - inProgressStages;
+    const installCompletionRate = totalStages > 0 ? Math.round((stagesDone / totalStages) * 100) : 0;
+
     // 2. Stage completion rate counts
     const stageCompletionRates: Record<number, number> = {};
     for (let s = 1; s <= 12; s++) {
@@ -73,7 +80,12 @@ export async function GET() {
       completedInspections,
       failedInspections,
       pendingInspectionsCount,
-      passRate
+      passRate,
+      stagesDone,
+      inProgressStages,
+      pendingStages,
+      totalStages,
+      installCompletionRate
     };
 
     return NextResponse.json({ success: true, metrics });

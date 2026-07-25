@@ -11,18 +11,18 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { email, role } = await request.json();
+    const { email } = await request.json();
 
-    if (!email || !role) {
-      return NextResponse.json({ message: 'Email and role are required.' }, { status: 400 });
+    if (!email) {
+      return NextResponse.json({ message: 'Email is required.' }, { status: 400 });
     }
 
     // 2. Fetch users and match
     const users = await dbService.getUsers();
-    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.role === role);
+    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
     if (!user) {
-      return NextResponse.json({ message: 'Invalid credentials or role mismatch.' }, { status: 401 });
+      return NextResponse.json({ message: 'Invalid credentials or user not found.' }, { status: 401 });
     }
 
     if (user.status !== 'active') {

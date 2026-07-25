@@ -35,27 +35,21 @@ export async function checkRateLimit(ip: string): Promise<{ success: boolean; li
 // ==========================================
 // 2. FIRESTORE DATABASE SERVICE
 // ==========================================
+
 export const dbService = {
   // Factories
-  async getFactories(): Promise<TenantFactory[]> {
-    return getMockDb().factories;
-  },
   async getFactory(id: string): Promise<TenantFactory | undefined> {
-    return getMockDb().factories.find(f => f.id === id);
-  },
-  async updateFactorySettings(id: string, settings: any): Promise<TenantFactory> {
-    const db = getMockDb();
-    const index = db.factories.findIndex(f => f.id === id);
-    if (index === -1) throw new Error('Factory not found');
-    db.factories[index].settings = { ...db.factories[index].settings, ...settings };
-    saveMockDb(db);
-    return db.factories[index];
-  },
-  async createFactory(factory: TenantFactory): Promise<TenantFactory> {
-    const db = getMockDb();
-    db.factories.push(factory);
-    saveMockDb(db);
-    return factory;
+    return {
+      id: id || 'factory-1',
+      name: 'Vireon Panels',
+      location: 'Bhiwadi, Rajasthan',
+      settings: {
+        allowStageSkipping: false,
+        requireDoubleApproval: true,
+        companyLogoUrl: ''
+      },
+      createdAt: new Date().toISOString()
+    };
   },
 
   // Users
@@ -82,18 +76,6 @@ export const dbService = {
     db.users[idx] = { ...db.users[idx], ...data };
     saveMockDb(db);
     return db.users[idx];
-  },
-
-  // Products
-  async getProducts(factoryId: string): Promise<Product[]> {
-    const products = getMockDb().products;
-    return products.filter(p => p.factoryId === factoryId);
-  },
-  async createProduct(product: Product): Promise<Product> {
-    const db = getMockDb();
-    db.products.push(product);
-    saveMockDb(db);
-    return product;
   },
 
   // Projects
