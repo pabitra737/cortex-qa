@@ -17,7 +17,6 @@ interface ChecklistItem {
 interface StageConfig {
   num: number;
   name: string;
-  emoji: string;
   subtitle: string;
   warningNotice?: string;
   items: ChecklistItem[];
@@ -27,7 +26,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   1: {
     num: 1,
     name: 'Site Survey',
-    emoji: '📍',
     subtitle: 'Walk the site before touching anything. Confirms the install is actually feasible.',
     items: [
       { id: 'panel_type', title: 'Panel type identified', instruction: 'MCC / PCC / APFC / DB — record on nameplate photo', type: 'choice' },
@@ -40,7 +38,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   2: {
     num: 2,
     name: 'Historical Billing Data',
-    emoji: '📄',
     subtitle: 'Collect the last 6 DISCOM bills. Feeds baseline kWh, tariff mapping, and ROI projections on the Cortex side.',
     items: [
       { id: 'discom_name', title: 'DISCOM name', instruction: 'WBSEDCL / TGSPDCL / BESCOM / MSEDCL / etc.', type: 'text', defaultValue: '—' },
@@ -54,7 +51,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   3: {
     num: 3,
     name: 'Kit & BOM Verification',
-    emoji: '📦',
     subtitle: 'Everything unboxed and accounted for before the panel is opened.',
     items: [
       { id: 'gw_serial', title: 'Gateway serial number', instruction: 'VRN-GW-XXXX on enclosure label', type: 'text', defaultValue: '—' },
@@ -68,7 +64,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   4: {
     num: 4,
     name: 'Panel Preparation',
-    emoji: '⚠️',
     subtitle: 'Safety first. Nothing else matters if this step is skipped.',
     warningNotice: 'Do not open the panel without a written work permit from the client electrical in-charge. Lock out / tag out where possible.',
     items: [
@@ -82,7 +77,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   5: {
     num: 5,
     name: 'Meter Mounting',
-    emoji: '📝',
     subtitle: 'Physical installation of the energy meter on the DIN rail.',
     items: [
       { id: 'din_rail', title: 'DIN rail available or new rail fitted', instruction: 'Min 35mm standard rail', type: 'choice' },
@@ -94,7 +88,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   6: {
     num: 6,
     name: 'CT Installation & Wiring',
-    emoji: '⚡',
     subtitle: 'Current transformers. This is the step most freshers get wrong. Polarity matters.',
     warningNotice: 'CRITICAL: NEVER leave a CT secondary open circuit while the primary is energized. Dangerous voltages will develop. Remove shorting links ONLY AFTER the CT secondary is wired to the meter terminals.',
     items: [
@@ -110,7 +103,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   7: {
     num: 7,
     name: 'Voltage Sensing',
-    emoji: '🔌',
     subtitle: 'Voltage reference for the meter — tapped off the busbar via a dedicated MCB.',
     items: [
       { id: 'sensing_mcb', title: '2A MCB fitted for voltage sensing', instruction: 'Dedicated — do not share with control circuit', type: 'choice' },
@@ -122,7 +114,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   8: {
     num: 8,
     name: 'Meter Configuration',
-    emoji: '⚙️',
     subtitle: 'Program the meter so it matches the panel and talks to the gateway.',
     items: [
       { id: 'config_ratio', title: 'CT ratio configured', instruction: 'Primary / 5A', type: 'text', suffix: ':5', defaultValue: '—' },
@@ -135,7 +126,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   9: {
     num: 9,
     name: 'Gateway Mounting',
-    emoji: '📡',
     subtitle: 'Physically install the Cortex enclosure inside the panel.',
     items: [
       { id: 'gw_position', title: 'Enclosure positioned away from HT / VFD zone', instruction: 'EMI-quiet corner, ideally near the door', type: 'choice' },
@@ -147,7 +137,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   10: {
     num: 10,
     name: 'RS485 Communication',
-    emoji: '🔗',
     subtitle: 'The physical bus between meter and gateway.',
     warningNotice: 'A/B polarity is not symmetric. Reversing them will not damage anything but nothing will communicate. Also: shield grounded at ONE end only, otherwise ground loops.',
     items: [
@@ -160,7 +149,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   11: {
     num: 11,
     name: 'Power-Up & SIM',
-    emoji: '🔋',
     subtitle: 'First energization of the gateway. Watch the LEDs.',
     items: [
       { id: 'sim_inserted', title: 'SIM inserted in modem slot', instruction: 'EC200U-CN or A7670C — check orientation', type: 'choice' },
@@ -173,7 +161,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   12: {
     num: 12,
     name: 'Cloud Commissioning & Data Validation',
-    emoji: '☁️',
     subtitle: 'The moment of truth. Numbers on the dashboard must match what a clamp meter sees.',
     items: [
       { id: 'cloud_online', title: 'Device shows Online in Cortex dashboard', instruction: 'quality.vireontech.in → devices', type: 'choice' },
@@ -187,7 +174,6 @@ const STAGES_CONFIG: Record<number, StageConfig> = {
   13: {
     num: 13,
     name: 'Handover',
-    emoji: '✅',
     subtitle: 'Close the loop with the client. Get it in writing.',
     items: [
       { id: 'ho_photos', title: 'Final panel-closed photos', instruction: 'Front, side, labels visible', type: 'image' },
@@ -280,8 +266,7 @@ export default function StageChecklistPage() {
             <div className="text-[10px] text-primary font-bold uppercase tracking-wider">
               STAGE {stage.num} OF 13
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-text-base flex items-center space-x-1.5">
-              <span>{stage.emoji}</span>
+            <h1 className="text-xl font-bold tracking-tight text-text-base">
               <span>{stage.name}</span>
             </h1>
           </div>

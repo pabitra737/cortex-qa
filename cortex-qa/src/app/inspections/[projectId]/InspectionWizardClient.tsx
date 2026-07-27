@@ -7,11 +7,11 @@ import NavigationLayout from '@/components/NavigationLayout';
 import { useAuth } from '@/providers/AuthProvider';
 import { useSync } from '@/providers/SyncProvider';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Lock, 
-  Camera, 
+import {
+  ChevronLeft,
+  ChevronRight,
+  Lock,
+  Camera,
   Undo,
   Download,
   AlertTriangle,
@@ -19,19 +19,19 @@ import {
 } from 'lucide-react';
 
 const INSTALLATION_STAGES = [
-  { num: 1, name: 'Site Survey', emoji: '📍', checklistId: 'chk-1' },
-  { num: 2, name: 'Historical Billing Data', emoji: '📄', checklistId: 'chk-2' },
-  { num: 3, name: 'Kit & BOM Verification', emoji: '📦', checklistId: 'chk-3' },
-  { num: 4, name: 'Panel Preparation', emoji: '⚠️', checklistId: 'chk-4' },
-  { num: 5, name: 'Meter Mounting', emoji: '📝', checklistId: 'chk-5' },
-  { num: 6, name: 'CT Installation & Wiring', emoji: '⚡', checklistId: 'chk-6' },
-  { num: 7, name: 'Voltage Sensing', emoji: '🔌', checklistId: 'chk-7' },
-  { num: 8, name: 'Meter Configuration', emoji: '⚙️', checklistId: 'chk-8' },
-  { num: 9, name: 'Gateway Mounting', emoji: '📡', checklistId: 'chk-9' },
-  { num: 10, name: 'RS485 Communication', emoji: '🔗', checklistId: 'chk-10' },
-  { num: 11, name: 'Power-Up & SIM', emoji: '🔋', checklistId: 'chk-11' },
-  { num: 12, name: 'Cloud Commissioning & Data Validation', emoji: '☁️', checklistId: 'chk-12' },
-  { num: 13, name: 'Handover', emoji: '✅', checklistId: 'chk-13' }
+  { num: 1, name: 'Site Survey', checklistId: 'chk-1' },
+  { num: 2, name: 'Historical Billing Data', checklistId: 'chk-2' },
+  { num: 3, name: 'Kit & BOM Verification', checklistId: 'chk-3' },
+  { num: 4, name: 'Panel Preparation', checklistId: 'chk-4' },
+  { num: 5, name: 'Meter Mounting', checklistId: 'chk-5' },
+  { num: 6, name: 'CT Installation & Wiring', checklistId: 'chk-6' },
+  { num: 7, name: 'Voltage Sensing', checklistId: 'chk-7' },
+  { num: 8, name: 'Meter Configuration', checklistId: 'chk-8' },
+  { num: 9, name: 'Gateway Mounting', checklistId: 'chk-9' },
+  { num: 10, name: 'RS485 Communication', checklistId: 'chk-10' },
+  { num: 11, name: 'Power-Up & SIM', checklistId: 'chk-11' },
+  { num: 12, name: 'Cloud Commissioning & Data Validation', checklistId: 'chk-12' },
+  { num: 13, name: 'Handover', checklistId: 'chk-13' }
 ];
 
 export function InspectionWizardClient({ projectId }: { projectId: string }) {
@@ -45,7 +45,7 @@ export function InspectionWizardClient({ projectId }: { projectId: string }) {
   const [remarks, setRemarks] = useState('');
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [photoPreviews, setPhotoPreviews] = useState<Record<string, string>>({});
-  
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [signatureSaved, setSignatureSaved] = useState<string | null>(null);
@@ -225,7 +225,7 @@ export function InspectionWizardClient({ projectId }: { projectId: string }) {
 
   const getStageStatus = (stageNum: number) => {
     if (!isAcme) return { label: 'Pending', color: 'gray', dot: 'bg-gray-300' };
-    
+
     // Hardcoded states for ACME Manufacturing to match screenshot
     if (stageNum === 1 || stageNum === 3) {
       return { label: 'Completed', color: 'green', dot: 'bg-green-600', result: 'Pass' };
@@ -239,7 +239,7 @@ export function InspectionWizardClient({ projectId }: { projectId: string }) {
   return (
     <NavigationLayout>
       <div className="space-y-6 max-w-5xl mx-auto px-2 pb-12">
-        
+
         {/* Offline Alert Banner */}
         {!isOnline && (
           <div className="p-3 bg-amber-500 text-white rounded-lg flex items-center space-x-2 text-sm font-semibold shadow-md animate-bounce">
@@ -250,7 +250,7 @@ export function InspectionWizardClient({ projectId }: { projectId: string }) {
 
         {/* Header block matching screenshot */}
         <div className="flex items-center space-x-3">
-          <button 
+          <button
             onClick={() => router.push('/projects')}
             className="h-8 w-8 flex items-center justify-center border border-border-custom bg-bg-surface hover:bg-slate-100 rounded-full cursor-pointer transition-colors shadow-sm"
           >
@@ -327,7 +327,7 @@ export function InspectionWizardClient({ projectId }: { projectId: string }) {
           <div className="space-y-3">
             {INSTALLATION_STAGES.map((s) => {
               const status = getStageStatus(s.num);
-              
+
               return (
                 <Link
                   key={s.num}
@@ -337,11 +337,11 @@ export function InspectionWizardClient({ projectId }: { projectId: string }) {
                   <div className="flex items-center space-x-4">
                     {/* Left Status Dot */}
                     <div className={`h-2.5 w-2.5 rounded-full ${status.dot}`}></div>
-                    
+
                     {/* Text details */}
                     <div>
                       <div className="font-bold text-sm text-text-base">
-                        {s.emoji} {s.name}
+                        {s.name}
                       </div>
                       <div className="text-[10px] text-text-muted mt-0.5 font-semibold">
                         Stage {s.num} of 13
@@ -356,13 +356,12 @@ export function InspectionWizardClient({ projectId }: { projectId: string }) {
 
                   {/* Right status badge */}
                   <div>
-                    <span className={`inline-block px-2.5 py-0.5 text-[10px] font-bold rounded border ${
-                      status.label === 'Completed'
-                        ? 'bg-green-50 text-green-700 border-green-100/50'
-                        : status.label === 'In Progress'
-                          ? 'bg-orange-50 text-[#B45309] border-orange-100/50'
-                          : 'bg-gray-50 text-gray-500 border-gray-100/50'
-                    }`}>
+                    <span className={`inline-block px-2.5 py-0.5 text-[10px] font-bold rounded border ${status.label === 'Completed'
+                      ? 'bg-green-50 text-green-700 border-green-100/50'
+                      : status.label === 'In Progress'
+                        ? 'bg-orange-50 text-[#B45309] border-orange-100/50'
+                        : 'bg-gray-50 text-gray-500 border-gray-100/50'
+                      }`}>
                       {status.label}
                     </span>
                   </div>
